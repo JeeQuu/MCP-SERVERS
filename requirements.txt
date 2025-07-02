@@ -1,5 +1,5 @@
-# Core MCP - Pin to compatible version
-mcp==1.0.0
+# Core MCP - Modern version with FastMCP support
+mcp>=1.10.0
 
 # ASGI/HTTP Server for Render deployment
 uvicorn>=0.24.0
