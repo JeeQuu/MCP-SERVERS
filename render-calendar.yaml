@@ -1,0 +1,21 @@
+services:
+  # Calendar MCP Server - For n8n Integration Testing
+  - type: web
+    name: calendar-mcp-server
+    runtime: python3
+    buildCommand: pip install -r requirements.txt
+    startCommand: python "Calendar MCP Server.py"
+    healthCheckPath: /
+    plan: starter
+    region: oregon
+    envVars:
+      - key: RENDER
+        value: true
+      - key: PORT
+        generateValue: true
+      - key: MCP_CLIENT_ID
+        value: production
+      - key: CALENDAR_TIMEZONE
+        value: UTC
+      - key: PYTHON_VERSION
+        value: "3.13" 
