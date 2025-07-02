@@ -1,0 +1,44 @@
+calendar:
+  business_hours:
+    end: '17:00'
+    start: 09:00
+  excluded_days:
+  - saturday
+  - sunday
+  timezone: UTC
+client_info:
+  created: '2024-01-01'
+  description: Configuration for MCP servers
+  name: Client mycompany
+elevenlabs:
+  api_key: your_elevenlabs_api_key
+  default_model: eleven_monolingual_v1
+  default_voice: rachel
+gmail:
+  credentials_path: credentials/mycompany/gmail_credentials.json
+  scopes:
+  - https://www.googleapis.com/auth/gmail.modify
+  token_path: tokens/mycompany/gmail_token.pickle
+instagram:
+  access_token: your_instagram_access_token
+  account_id: your_instagram_business_account_id
+  app_id: your_facebook_app_id
+  app_secret: your_facebook_app_secret
+  page_id: your_facebook_page_id
+pdf_tools:
+  api_key: your_pdfshift_api_key
+  default_format: A4
+  default_margin: 20
+supabase:
+  key: your_supabase_anon_key
+  table_prefix: mycompany
+  url: your_supabase_url
+telegram:
+  chat_id: your_default_chat_id
+  parse_mode: HTML
+  token: your_telegram_bot_token
+tiktok:
+  access_token: your_tiktok_access_token
+  client_key: your_tiktok_client_key
+  client_secret: your_tiktok_client_secret
+  refresh_token: your_tiktok_refresh_token

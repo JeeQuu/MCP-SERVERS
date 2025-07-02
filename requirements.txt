@@ -1,0 +1,51 @@
+# Core MCP - Pin to compatible version
+mcp==1.0.0
+
+# ASGI/HTTP Server for Render deployment
+uvicorn>=0.24.0
+starlette>=0.32.0
+fastapi>=0.104.0
+
+# Calendar Server
+python-dateutil>=2.8.0
+icalendar>=5.0.0
+
+# Gmail Server  
+google-auth>=2.17.0
+google-auth-oauthlib>=1.0.0
+google-auth-httplib2>=0.2.0
+google-api-python-client>=2.88.0
+
+# PDF Tools Server
+PyPDF2>=3.0.0
+reportlab>=4.0.0
+httpx>=0.24.0
+
+# Telegram Server
+httpx>=0.24.0
+
+# ElevenLabs Server
+httpx>=0.24.0
+elevenlabs>=0.2.0
+
+# Instagram Server
+httpx>=0.24.0
+requests>=2.31.0
+
+# TikTok Server
+httpx>=0.24.0
+requests>=2.31.0
+
+# Supabase Server  
+supabase>=1.0.0
+httpx>=0.24.0
+
+# Dropbox Server
+httpx>=0.24.0
+
+# Common utilities
+typing-extensions>=4.0.0
+pyyaml>=6.0.0
+
+# Additional dependencies for production
+python-multipart>=0.0.6

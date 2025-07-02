@@ -1,0 +1,47 @@
+# Render Environment Variables Template
+# Copy these to your Render service environment variables
+
+# Required for all services
+RENDER=true
+MCP_CLIENT_ID=production
+
+# Gmail MCP Server
+PRODUCTION_GMAIL_CREDENTIALS_PATH=/opt/render/project/.render/gmail_credentials.json
+PRODUCTION_GMAIL_TOKEN_PATH=/opt/render/project/.render/gmail_token.pickle
+
+# Telegram MCP Server
+PRODUCTION_TELEGRAM_TOKEN=your_telegram_bot_token_here
+PRODUCTION_TELEGRAM_CHAT_ID=your_telegram_chat_id_here
+
+# PDF Tools MCP Server
+PRODUCTION_PDF_API_KEY=your_pdfshift_api_key_here
+
+# ElevenLabs MCP Server
+PRODUCTION_ELEVENLABS_API_KEY=your_elevenlabs_api_key_here
+PRODUCTION_ELEVENLABS_VOICE_ID=21m00Tcm4TlvDq8ikWAM
+
+# Supabase MCP Server
+PRODUCTION_SUPABASE_URL=your_supabase_project_url_here
+PRODUCTION_SUPABASE_KEY=your_supabase_anon_key_here
+
+# Instagram MCP Server
+PRODUCTION_INSTAGRAM_ACCESS_TOKEN=your_instagram_access_token_here
+PRODUCTION_FACEBOOK_APP_ID=your_facebook_app_id_here
+PRODUCTION_FACEBOOK_APP_SECRET=your_facebook_app_secret_here
+PRODUCTION_INSTAGRAM_ACCOUNT_ID=your_instagram_business_account_id_here
+PRODUCTION_FACEBOOK_PAGE_ID=your_facebook_page_id_here
+
+# TikTok MCP Server
+PRODUCTION_TIKTOK_CLIENT_KEY=your_tiktok_client_key_here
+PRODUCTION_TIKTOK_CLIENT_SECRET=your_tiktok_client_secret_here
+PRODUCTION_TIKTOK_ACCESS_TOKEN=your_tiktok_access_token_here
+PRODUCTION_TIKTOK_REFRESH_TOKEN=your_tiktok_refresh_token_here
+
+# Calendar MCP Server
+CALENDAR_TIMEZONE=UTC
+
+# Dropbox MCP Server
+PRODUCTION_DROPBOX_ACCESS_TOKEN=your_dropbox_access_token_here
+PRODUCTION_DROPBOX_REFRESH_TOKEN=your_dropbox_refresh_token_here
+PRODUCTION_DROPBOX_APP_KEY=your_dropbox_app_key_here
+PRODUCTION_DROPBOX_APP_SECRET=your_dropbox_app_secret_here 

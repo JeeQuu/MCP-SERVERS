@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  mcp-gmail-mycompany:
+    build: .
+    environment:
+      - MCP_CLIENT_ID=mycompany
+    volumes:
+      - ./configs:/app/configs
+      - ./credentials:/app/credentials
+      - ./tokens:/app/tokens
+    restart: unless-stopped
+    
+  mcp-telegram-mycompany:
+    build: .
+    environment:
+      - MCP_CLIENT_ID=mycompany
+    volumes:
+      - ./configs:/app/configs
+    restart: unless-stopped
+    
+  mcp-pdf-mycompany:
+    build: .
+    environment:
+      - MCP_CLIENT_ID=mycompany
+    volumes:
+      - ./configs:/app/configs
+    restart: unless-stopped
+    
+  mcp-instagram-mycompany:
+    build: .
+    environment:
+      - MCP_CLIENT_ID=mycompany
+    volumes:
+      - ./configs:/app/configs
+    restart: unless-stopped
+    
+  mcp-tiktok-mycompany:
+    build: .
+    environment:
+      - MCP_CLIENT_ID=mycompany
+    volumes:
+      - ./configs:/app/configs
+    restart: unless-stopped

@@ -1,0 +1,185 @@
+services:
+  # Calendar MCP Server
+  - type: web
+    name: calendar-mcp-server
+    runtime: python3
+    buildCommand: pip install -r requirements.txt
+    startCommand: python "Calendar MCP Server.py"
+    healthCheckPath: /health
+    plan: starter
+    region: oregon
+    envVars:
+      - key: RENDER
+        value: true
+      - key: PORT
+        generateValue: true
+      - key: MCP_CLIENT_ID
+        value: production
+      - key: CALENDAR_TIMEZONE
+        value: UTC
+
+  # Telegram MCP Server
+  - type: web
+    name: telegram-mcp-server
+    runtime: python3
+    buildCommand: pip install -r requirements.txt
+    startCommand: python "Telegram MCP Server.py"
+    healthCheckPath: /health
+    plan: starter
+    region: oregon
+    envVars:
+      - key: RENDER
+        value: true
+      - key: PORT
+        generateValue: true
+      - key: MCP_CLIENT_ID
+        value: production
+      - key: PRODUCTION_TELEGRAM_TOKEN
+        sync: false
+      - key: PRODUCTION_TELEGRAM_CHAT_ID
+        sync: false
+
+  # PDF Tools MCP Server
+  - type: web
+    name: pdf-tools-mcp-server
+    runtime: python3
+    buildCommand: pip install -r requirements.txt
+    startCommand: python "PDF Tools MCP Server.py"
+    healthCheckPath: /health
+    plan: starter
+    region: oregon
+    envVars:
+      - key: RENDER
+        value: true
+      - key: PORT
+        generateValue: true
+      - key: MCP_CLIENT_ID
+        value: production
+      - key: PRODUCTION_PDF_API_KEY
+        sync: false
+
+  # ElevenLabs MCP Server
+  - type: web
+    name: elevenlabs-mcp-server
+    runtime: python3
+    buildCommand: pip install -r requirements.txt
+    startCommand: python "ElevenLabs MCP Server.py"
+    healthCheckPath: /health
+    plan: starter
+    region: oregon
+    envVars:
+      - key: RENDER
+        value: true
+      - key: PORT
+        generateValue: true
+      - key: MCP_CLIENT_ID
+        value: production
+      - key: PRODUCTION_ELEVENLABS_API_KEY
+        sync: false
+      - key: PRODUCTION_ELEVENLABS_VOICE_ID
+        value: 21m00Tcm4TlvDq8ikWAM
+
+  # Supabase MCP Server
+  - type: web
+    name: supabase-mcp-server
+    runtime: python3
+    buildCommand: pip install -r requirements.txt
+    startCommand: python "Supabase MCP Server.py"
+    healthCheckPath: /health
+    plan: starter
+    region: oregon
+    envVars:
+      - key: RENDER
+        value: true
+      - key: PORT
+        generateValue: true
+      - key: MCP_CLIENT_ID
+        value: production
+      - key: PRODUCTION_SUPABASE_URL
+        sync: false
+      - key: PRODUCTION_SUPABASE_KEY
+        sync: false
+
+  # Instagram MCP Server
+  - type: web
+    name: instagram-mcp-server
+    runtime: python3
+    buildCommand: pip install -r requirements.txt
+    startCommand: python "Instagram MCP Server.py"
+    healthCheckPath: /health
+    plan: starter
+    region: oregon
+    envVars:
+      - key: RENDER
+        value: true
+      - key: PORT
+        generateValue: true
+      - key: MCP_CLIENT_ID
+        value: production
+      - key: PRODUCTION_INSTAGRAM_ACCESS_TOKEN
+        sync: false
+      - key: PRODUCTION_FACEBOOK_APP_ID
+        sync: false
+      - key: PRODUCTION_FACEBOOK_APP_SECRET
+        sync: false
+      - key: PRODUCTION_INSTAGRAM_ACCOUNT_ID
+        sync: false
+      - key: PRODUCTION_FACEBOOK_PAGE_ID
+        sync: false
+
+  # TikTok MCP Server
+  - type: web
+    name: tiktok-mcp-server
+    runtime: python3
+    buildCommand: pip install -r requirements.txt
+    startCommand: python "TikTok MCP Server.py"
+    healthCheckPath: /health
+    plan: starter
+    region: oregon
+    envVars:
+      - key: RENDER
+        value: true
+      - key: PORT
+        generateValue: true
+      - key: MCP_CLIENT_ID
+        value: production
+      - key: PRODUCTION_TIKTOK_CLIENT_KEY
+        sync: false
+      - key: PRODUCTION_TIKTOK_CLIENT_SECRET
+        sync: false
+      - key: PRODUCTION_TIKTOK_ACCESS_TOKEN
+        sync: false
+      - key: PRODUCTION_TIKTOK_REFRESH_TOKEN
+        sync: false
+
+  # Dropbox MCP Server
+  - type: web
+    name: dropbox-mcp-server
+    runtime: python3
+    buildCommand: pip install -r requirements.txt
+    startCommand: python "Dropbox MCP Server.py"
+    healthCheckPath: /health
+    plan: starter
+    region: oregon
+    envVars:
+      - key: RENDER
+        value: true
+      - key: PORT
+        generateValue: true
+      - key: MCP_CLIENT_ID
+        value: production
+      - key: PRODUCTION_DROPBOX_ACCESS_TOKEN
+        sync: false
+      - key: PRODUCTION_DROPBOX_REFRESH_TOKEN
+        sync: false
+      - key: PRODUCTION_DROPBOX_APP_KEY
+        sync: false
+      - key: PRODUCTION_DROPBOX_APP_SECRET
+        sync: false
+
+databases:
+  # Optional: Redis for caching/sessions
+  - name: mcp-cache
+    plan: starter
+    region: oregon
+    ipAllowList: []
