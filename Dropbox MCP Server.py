@@ -364,57 +364,43 @@ Storage Available: {(allocated - used) / (1024**3):.2f} GB"""
 
 async def main():
     """Main entry point"""
-    port = int(os.getenv("PORT", "8001"))
+    port = int(os.getenv("PORT", "8000"))
     
-    if len(sys.argv) > 1 and sys.argv[1] == "--stdio":
-        # Run with stdio transport for local development
-        print("🔧 Running Dropbox MCP Server with stdio transport", file=sys.stderr)
-        try:
-            async with stdio_server() as streams:
-                await server.run(streams[0], streams[1], {})
-        except Exception as e:
-            print(f"❌ Stdio transport failed: {e}", file=sys.stderr)
-            raise
-    else:
-        # Run with custom HTTP wrapper for Render deployment
-        print(f"🚀 Starting Dropbox MCP Server with HTTP transport on port {port}", file=sys.stderr)
-        print(f"❤️  Health check endpoint: http://0.0.0.0:{port}/", file=sys.stderr)
-        print(f"🌍 Environment: {os.getenv('RENDER', 'local')}", file=sys.stderr)
-        
-        try:
-            # Import transport components
-            from starlette.applications import Starlette
-            from starlette.routing import Route
-            from starlette.responses import JSONResponse
-            import uvicorn
-            
-            async def health_check(request):
-                return JSONResponse({
-                    "status": "healthy", 
-                    "service": "Dropbox MCP Server",
-                    "version": "1.0.0",
-                    "transport": "http",
-                    "timestamp": datetime.now().isoformat(),
-                    "dropbox_configured": bool(os.getenv("DROPBOX_ACCESS_TOKEN"))
-                })
-            
-            # Create Starlette app with health check
-            app = Starlette(routes=[
-                Route("/", health_check),
-                Route("/health", health_check),
-            ])
-            
-            print(f"📡 Health check routes configured successfully", file=sys.stderr)
-            print(f"📡 Dropbox MCP Server starting on http://0.0.0.0:{port}", file=sys.stderr)
-            
-            # Run with uvicorn
-            config = uvicorn.Config(app, host="0.0.0.0", port=port, log_level="info")
-            server_instance = uvicorn.Server(config)
-            await server_instance.serve()
-            
-        except Exception as e:
-            print(f"❌ HTTP server failed: {e}", file=sys.stderr)
-            raise
+    # For Render deployment - just run a simple health check server
+    print(f"🚀 Starting Simple Dropbox MCP Server on port {port}", file=sys.stderr)
+    print(f"🌍 Environment: {os.getenv('RENDER', 'local')}", file=sys.stderr)
+    
+    # Import transport components
+    from starlette.applications import Starlette
+    from starlette.routing import Route
+    from starlette.responses import JSONResponse
+    import uvicorn
+    
+    async def health_check(request):
+        return JSONResponse({
+            "status": "healthy", 
+            "service": "Dropbox MCP Server",
+            "version": "1.0.0",
+            "transport": "http",
+            "timestamp": datetime.now().isoformat(),
+            "dropbox_configured": bool(os.getenv("DROPBOX_ACCESS_TOKEN")),
+            "port": port,
+            "message": "Simple health check working"
+        })
+    
+    # Create Starlette app with health check
+    app = Starlette(routes=[
+        Route("/", health_check),
+        Route("/health", health_check),
+    ])
+    
+    print(f"✅ Health check routes configured", file=sys.stderr)
+    print(f"🚀 Starting server on http://0.0.0.0:{port}", file=sys.stderr)
+    
+    # Run with uvicorn
+    config = uvicorn.Config(app, host="0.0.0.0", port=port, log_level="info")
+    server_instance = uvicorn.Server(config)
+    await server_instance.serve()
 
 if __name__ == "__main__":
     asyncio.run(main()) 
