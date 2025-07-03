@@ -126,6 +126,7 @@ def get_calendar_config() -> str:
 
 def main():
     """Main entry point"""
+    # Render sets PORT environment variable automatically
     port = int(os.getenv("PORT", "8000"))
     
     if len(sys.argv) > 1 and sys.argv[1] == "--stdio":
@@ -135,13 +136,16 @@ def main():
     else:
         # Run with modern Streamable HTTP transport for production
         print(f"🚀 Starting Calendar MCP Server with Streamable HTTP on port {port}", file=sys.stderr)
-        print(f"📡 Streamable HTTP endpoint: http://localhost:{port}/mcp", file=sys.stderr)
-        print(f"❤️  Health check endpoint: http://localhost:{port}/", file=sys.stderr)
+        print(f"📡 Streamable HTTP endpoint: http://0.0.0.0:{port}/mcp", file=sys.stderr)
+        print(f"❤️  Health check endpoint: http://0.0.0.0:{port}/", file=sys.stderr)
+        print(f"🌍 Environment: {os.getenv('RENDER', 'local')}", file=sys.stderr)
         
         # Configure for production deployment
-        mcp.settings.host = "0.0.0.0"  # Accept connections from any host
-        mcp.settings.port = port
-        mcp.run(transport="streamable-http")
+        mcp.run(
+            transport="streamable-http",
+            host="0.0.0.0",
+            port=port
+        )
 
 if __name__ == "__main__":
     main()
