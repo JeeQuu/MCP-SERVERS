@@ -8,11 +8,9 @@ Uses basic MCP server with custom HTTP wrapper for Render deployment
 
 import os
 import sys
-import json
 import asyncio
 from datetime import datetime, timedelta
 from typing import Any
-from aiohttp import web
 from mcp.server import Server
 from mcp.server.stdio import stdio_server
 from mcp.types import Tool, TextContent
@@ -187,52 +185,6 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
     else:
         return [TextContent(type="text", text=f"Unknown tool: {name}")]
 
-async def handle_mcp_request(request):
-    """Handle MCP requests over HTTP"""
-    if request.method == "GET":
-        # Health check endpoint
-        return web.json_response({
-            "status": "healthy", 
-            "service": "Calendar MCP Server",
-            "version": "1.0.0",
-            "transport": "http",
-            "timestamp": datetime.now().isoformat()
-        })
-    
-    try:
-        data = await request.json()
-        method = data.get("method", "")
-        
-        if method == "tools/list":
-            tools = await list_tools()
-            return web.json_response({
-                "jsonrpc": "2.0",
-                "id": data.get("id"),
-                "result": {"tools": [tool.model_dump() for tool in tools]}
-            })
-        
-        elif method == "tools/call":
-            params = data.get("params", {})
-            result = await call_tool(params.get("name", ""), params.get("arguments", {}))
-            return web.json_response({
-                "jsonrpc": "2.0",
-                "id": data.get("id"),
-                "result": {"content": [content.model_dump() for content in result]}
-            })
-        
-        else:
-            return web.json_response({
-                "jsonrpc": "2.0",
-                "id": data.get("id"),
-                "error": {"code": -32601, "message": "Method not found"}
-            })
-            
-    except Exception as e:
-        return web.json_response({
-            "jsonrpc": "2.0",
-            "id": data.get("id") if "data" in locals() else None,
-            "error": {"code": -32603, "message": str(e)}
-        })
 
 async def main():
     """Main entry point"""
@@ -244,31 +196,47 @@ async def main():
         async with stdio_server() as streams:
             await server.run(streams[0], streams[1])
     else:
-        # Run with HTTP transport for production
-        print(f"🚀 Starting Calendar MCP Server with HTTP on port {port}", file=sys.stderr)
-        print(f"📡 MCP HTTP endpoint: http://0.0.0.0:{port}/mcp", file=sys.stderr)
+        # Run with SSE transport for n8n MCP Client compatibility
+        print(f"🚀 Starting Calendar MCP Server with SSE transport on port {port}", file=sys.stderr)
+        print(f"📡 MCP SSE endpoint: http://0.0.0.0:{port}/sse", file=sys.stderr)
         print(f"❤️  Health check endpoint: http://0.0.0.0:{port}/", file=sys.stderr)
         print(f"🌍 Environment: {os.getenv('RENDER', 'local')}", file=sys.stderr)
         
-        # Create HTTP server
-        app = web.Application()
-        app.router.add_route("*", "/", handle_mcp_request)
-        app.router.add_route("*", "/mcp", handle_mcp_request)
-        app.router.add_route("*", "/health", handle_mcp_request)
+        # Import SSE transport
+        from mcp.server.sse import SseServerTransport
+        from starlette.applications import Starlette
+        from starlette.routing import Route
+        from starlette.responses import JSONResponse
+        import uvicorn
         
-        runner = web.AppRunner(app)
-        await runner.setup()
-        site = web.TCPSite(runner, "0.0.0.0", port)
-        await site.start()
+        # Create SSE transport
+        sse = SseServerTransport("/messages")
         
-        print(f"📡 Calendar MCP Server running on http://0.0.0.0:{port}", file=sys.stderr)
+        async def health_check(request):
+            return JSONResponse({
+                "status": "healthy",
+                "service": "Calendar MCP Server",
+                "version": "1.0.0",
+                "transport": "sse",
+                "timestamp": datetime.now().isoformat()
+            })
+        
+        # Create Starlette app with SSE support
+        app = Starlette(routes=[
+            Route("/", health_check),
+            Route("/health", health_check),
+        ])
+        
+        # Add SSE routes
+        sse.add_routes(app, server)
+        
+        print(f"📡 Calendar MCP Server running with SSE on http://0.0.0.0:{port}", file=sys.stderr)
         print("🏃 Server is running. Press Ctrl+C to stop.", file=sys.stderr)
         
-        # Keep the server running
-        try:
-            await asyncio.Future()  # run forever
-        except KeyboardInterrupt:
-            print("🛑 Server stopped", file=sys.stderr)
+        # Run with uvicorn
+        config = uvicorn.Config(app, host="0.0.0.0", port=port, log_level="info")
+        server_instance = uvicorn.Server(config)
+        await server_instance.serve()
 
 if __name__ == "__main__":
     asyncio.run(main())
