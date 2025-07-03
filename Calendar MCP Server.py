@@ -124,8 +124,12 @@ def main():
         print(f"🌍 Environment: {os.getenv('RENDER', 'local')}", file=sys.stderr)
         
         # Configure for production deployment with proper host binding
-        import uvicorn
-        uvicorn.run(mcp.app, host="0.0.0.0", port=port)
+        # FastMCP with explicit server configuration
+        mcp.run(
+            transport="streamable-http",
+            host="0.0.0.0",
+            port=port
+        )
 
 if __name__ == "__main__":
     main()
