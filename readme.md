@@ -2,6 +2,23 @@
 
 A powerful collection of MCP (Model Control Protocol) servers designed for seamless integration with n8n to create sophisticated automation workflows.
 
+## 📚 Documentation & Support
+
+### 🔧 **[SOLUTIONS & TROUBLESHOOTING GUIDE](SOLUTIONS_AND_TROUBLESHOOTING.md)**
+**Essential reading for developers and maintainers!**
+
+This comprehensive guide documents:
+- Complete modernization process from SSE to Streamable HTTP
+- All problems encountered and their solutions
+- Deployment challenges and fixes
+- Best practices and templates
+- Emergency troubleshooting checklist
+- Architecture evolution and technical patterns
+
+**Perfect for:** New team members, troubleshooting issues, understanding the codebase evolution, and maintaining continuity across development sessions.
+
+---
+
 ## 🚀 Available Servers
 
 ### 📅 Calendar MCP Server
