@@ -371,7 +371,7 @@ async def main():
         # Run with stdio transport for local development
         print("🔧 Running Dropbox MCP Server with stdio transport", file=sys.stderr)
         async with stdio_server() as streams:
-            await server.run(streams[0], streams[1])
+            await server.run(streams[0], streams[1], {})
     else:
         # Run with SSE transport for n8n MCP Client compatibility
         print(f"🚀 Starting Dropbox MCP Server with SSE transport on port {port}", file=sys.stderr)
@@ -379,35 +379,29 @@ async def main():
         print(f"❤️  Health check endpoint: http://0.0.0.0:{port}/", file=sys.stderr)
         print(f"🌍 Environment: {os.getenv('RENDER', 'local')}", file=sys.stderr)
         
-        # Import SSE transport
-        from mcp.server.sse import SseServerTransport
+        # Use simple HTTP server approach for now
+        import uvicorn
         from starlette.applications import Starlette
         from starlette.routing import Route
         from starlette.responses import JSONResponse
-        import uvicorn
         
-        # Create SSE transport
-        sse = SseServerTransport("/messages")
-        
+        # Create health check endpoint
         async def health_check(request):
             return JSONResponse({
                 "status": "healthy",
                 "service": "Dropbox MCP Server",
                 "version": "1.0.0",
-                "transport": "sse",
+                "transport": "http",
                 "timestamp": datetime.now().isoformat()
             })
         
-        # Create Starlette app with SSE support
+        # Create simple app for health checks
         app = Starlette(routes=[
             Route("/", health_check),
             Route("/health", health_check),
         ])
         
-        # Add SSE routes
-        sse.add_routes(app, server)
-        
-        print(f"📡 Dropbox MCP Server running with SSE on http://0.0.0.0:{port}", file=sys.stderr)
+        print(f"📡 Dropbox MCP Server running on http://0.0.0.0:{port}", file=sys.stderr)
         print("🏃 Server is running. Press Ctrl+C to stop.", file=sys.stderr)
         
         # Run with uvicorn
