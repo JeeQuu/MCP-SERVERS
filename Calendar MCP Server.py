@@ -95,7 +95,7 @@ def get_days_between_dates(start_date: str, end_date: str) -> str:
         return "Invalid date format. Please use YYYY-MM-DD format for both dates."
 
 @mcp.tool()
-async def schedule_reminder(title: str, date: str, time: str, ctx: Context) -> str:
+async def schedule_reminder(ctx: Context, title: str, date: str, time: str) -> str:
     """Schedule a calendar reminder"""
     try:
         # Validate date and time format
