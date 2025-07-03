@@ -20,6 +20,23 @@ load_dotenv()
 # Create MCP server with modern Streamable HTTP support
 mcp = FastMCP("Calendar MCP Server")
 
+# Add explicit health check routes
+@mcp.get("/")
+async def health_check():
+    """Health check endpoint for deployment services"""
+    return {"status": "healthy", "service": "Calendar MCP Server", "version": "1.0.0"}
+
+@mcp.get("/health")
+async def health_check_detailed():
+    """Detailed health check endpoint"""
+    return {
+        "status": "healthy",
+        "service": "Calendar MCP Server",
+        "version": "1.0.0",
+        "transport": "streamable-http",
+        "timestamp": datetime.now().isoformat()
+    }
+
 @mcp.tool()
 def get_current_date() -> str:
     """Get the current date and time"""
